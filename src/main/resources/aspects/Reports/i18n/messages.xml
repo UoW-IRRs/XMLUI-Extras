@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<catalogue xml:lang="en" xmlns:i18n="http://apache.org/cocoon/i18n/2.1" xmlns="http://apache.org/cocoon/i18n/2.1">
+
+    <!--
+      The format used by all keys is as follows
+
+      xmlui.<Aspect>.<Java Class>.<name>
+
+      There are a few exceptions to this nameing format,
+      1) Some general keys are in the xmlui.general namespace
+         because they are used very frequently.
+      2) Some general keys which are specific to a particular aspect
+         may be found at xmlui.<Aspect> without specifiying a
+         particular java class.
+      -->
+
+    <message key="uow.aspects.Reports.Navigation.options_list_head">Reporting</message>
+    <message key="uow.aspects.Reports.Navigation.standard_link_text">Standard Reports</message>
+    <message key="uow.aspects.Reports.StandardReportsTransformer.home_head">Standard Reports</message>
+    <message key="uow.aspects.Reports.StandardReportsTransformer.title">Standard Reports</message>
+    <message key="uow.aspects.Reports.StandardReportsTransformer.trail">Standard Reports</message>
+    <message key="uow.aspects.Reports.StandardReportsTransformer.dspace_home">AgScite Home</message>
+    <message key="uow.aspects.Reports.StandardReportsTransformer.fail">The system failed to send the requested report. If the problem persists, please contact the AgScite Administrator.</message>
+    <message key="uow.aspects.Reports.StandardReportsTransformer.email_address_label">Your email address</message>
+    <message key="uow.aspects.Reports.StandardReportsTransformer.email_address_help">Please enter a valid email address to receive the report</message>
+    <message key="uow.aspects.Reports.StandardReportsTransformer.submit">Request report</message>
+    <message key="uow.aspects.Reports.StandardReportsTransformer.success">The report has been sent successfully to {0}</message>
+    <message key="uow.aspects.Reports.StandardReportsTransformer.report_label">Choose a report</message>
+    <message key="uow.aspects.Reports.StandardReportsTransformer.report_help">Please choose the report you are interested in from the list above</message>
+
+</catalogue>
