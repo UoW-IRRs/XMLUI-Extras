@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>nz.ac.waikato.its</groupId>
+    <artifactId>xmlui-extras</artifactId>
+    <version>0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>Additional DSpace XMLUI code</name>
+  <url>https://github.com/lconz-irr/XMLUI-Extras.git</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+	<version>2.3.2</version>
+        <configuration>
+          <source>1.7</source>
+          <target>1.7</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>nz.ac.waikato.its</groupId>
+            <artifactId>api-extras</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.dspace</groupId>
+            <artifactId>dspace-xmlui</artifactId>
+            <type>jar</type>
+            <classifier>classes</classifier>
+            <version>4.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <scm>
+      <connection>scm:git:git://github.com/lconz-irr/XMLUI-Extras.git</connection>
+      <url>https://github.com/lconz-irr/XMLUI-Extras</url>
+      <developerConnection>scm:git:ssh://git@github.com/lconz-irr/XMLUI-Extras.git</developerConnection>
+    </scm>
+
+    <distributionManagement>
+        <!-- Publish versioned releases here -->
+        <repository>
+            <id>hosted-dspace</id>
+            <name>UoW DSpace Releases</name>
+            <url>http://mvnrepo.its.waikato.ac.nz:8081/nexus/content/repositories/uow-dspace-releases/</url>
+        </repository>
+
+        <!-- Publish snapshots here -->
+        <snapshotRepository>
+            <id>hosted-dspace</id>
+            <name>UoW DSpace Snapshots</name>
+            <url>http://mvnrepo.its.waikato.ac.nz:8081/nexus/content/repositories/uow-dspace-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+</project>
