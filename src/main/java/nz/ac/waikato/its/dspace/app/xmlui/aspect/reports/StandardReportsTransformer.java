@@ -28,32 +28,67 @@ public class StandardReportsTransformer extends AbstractDSpaceTransformer{
     private static final Message T_fail = message("uow.aspects.Reports.StandardReportsTransformer.fail");
     private static final Message T_reportName_label = message("uow.aspects.Reports.StandardReportsTransformer.report_label");
     private static final Message T_reportName_help = message("uow.aspects.Reports.StandardReportsTransformer.report_help");
+    private static final Message T_start_date_label = message("uow.aspects.Reports.StandardReportsTransformer.start_date_label");
+    private static final Message T_start_date_help = message("uow.aspects.Reports.StandardReportsTransformer.start_date_help");
+    private static final Message T_end_date_label = message("uow.aspects.Reports.StandardReportsTransformer.end_date_label");
+    private static final Message T_end_date_help = message("uow.aspects.Reports.StandardReportsTransformer.end_date_help");
 
     @Override
     public void addBody(Body body) throws SAXException, WingException, UIException, SQLException, IOException, AuthorizeException, ProcessingException {
         Division reportHome = body.addDivision("standard-report-home");
-        Division report = reportHome.addDivision("standard-report-div");
+        Division report = reportHome.addDivision("standard-report-div","standard-report");
         report.setHead(T_standard_report);
 
         String success = parameters.getParameter(StandardReportsAction.STATUS,"");
         if(success.equals(StandardReportsAction.SUCCESS)){
             report.addDivision("general-message","notice success alert alert-success").addPara(T_success.parameterize(parameters.getParameter(StandardReportsAction.EMAIL, "")));
         } else if(success.equals(StandardReportsAction.FAILURE)){
-            report.addDivision("general-message","notice danger alert alert-danger").addPara(T_fail);
+            Division noticeDiv = report.addDivision("general-message", "notice danger alert alert-danger");
+            noticeDiv.addPara(T_fail);
+            String message = parameters.getParameter(StandardReportsAction.MESSAGE,"");
+            if(!message.equals("")){
+                noticeDiv.addPara(message(message));
+            }
+
         }
 
         Division div = report.addInteractiveDivision("standard-report-form", contextPath + "/reports/standard", Division.METHOD_POST);
         List form = div.addList("choose-report",List.TYPE_FORM);
+
         Select reportName = form.addItem().addSelect("report_name");
         reportName.setMultiple(false);
-        reportName.addOption(0,"Report 1: AgResearch Group and Team | Output Type and Subtype | Title | Date Submitted | Citation | AgScite Handle");
+        reportName.addOption("report1","All Outputs by AgResearch Groups");
         reportName.setOptionSelected(0);
         reportName.setLabel(T_reportName_label);
         reportName.setHelp(T_reportName_help);
+
+        Text startDateText = form.addItem().addText("fromDate","from");
+        startDateText.setLabel(T_start_date_label);
+        startDateText.setHelp(T_start_date_help);
+
+        Text endDateText = form.addItem().addText("toDate","to");
+        endDateText.setLabel(T_end_date_label);
+        endDateText.setHelp(T_end_date_help);
+
         Text emailAddressField = form.addItem().addText("email");
         emailAddressField.setLabel(T_email_address_label);
         emailAddressField.setHelp(T_email_address_help);
+
+        if(success.equals(StandardReportsAction.FAILURE)){
+            prepopulateValue(StandardReportsAction.EMAIL,emailAddressField);
+            prepopulateValue(StandardReportsAction.START_DATE,startDateText);
+            prepopulateValue(StandardReportsAction.END_DATE,endDateText);
+        }
+
         div.addPara().addButton("submit_report").setValue(T_submit);
+    }
+
+    private void prepopulateValue(String reportsActionName,Text field) throws WingException {
+        String preSetValues;
+        preSetValues = parameters.getParameter(reportsActionName,"");
+        if(!preSetValues.equals("")){
+            field.setValue(preSetValues);
+        }
     }
 
     @Override

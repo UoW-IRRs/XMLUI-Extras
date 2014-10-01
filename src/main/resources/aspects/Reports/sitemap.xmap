@@ -14,6 +14,7 @@
         <map:transformers>
             <map:transformer name="Navigation" src="nz.ac.waikato.its.dspace.app.xmlui.aspect.reports.Navigation"/>
             <map:transformer name="StandardReportsTransformer" src="nz.ac.waikato.its.dspace.app.xmlui.aspect.reports.StandardReportsTransformer"/>
+            <map:transformer name="IncludePageMeta" src="org.dspace.app.xmlui.wing.IncludePageMeta"/>
         </map:transformers>
 
         <map:actions>
@@ -35,13 +36,24 @@
                         <map:transform type="StandardReportsTransformer">
                             <map:parameter name="status" value="{status}"/>
                             <map:parameter name="email" value="{email}"/>
+                            <map:parameter name="message" value="{message}"/>
+                            <map:parameter name="startDate" value="{startDate}"/>
+                            <map:parameter name="endDate" value="{endDate}"/>
+                        </map:transform>
+
+                        <map:transform type="IncludePageMeta">
+                            <map:parameter name="javascript" value="scripts/reports.js" />
                         </map:transform>
 
                         <map:serialize type="xml"/>
                     </map:act>
                 </map:match>
                 <map:transform type="StandardReportsTransformer"/>
+                <map:transform type="IncludePageMeta">
+                    <map:parameter name="javascript" value="scripts/reports.js" />
+                </map:transform>
             </map:match>
+
 
             <!-- Not a URL we care about, so just pass it on. -->
             <map:serialize type="xml"/>
