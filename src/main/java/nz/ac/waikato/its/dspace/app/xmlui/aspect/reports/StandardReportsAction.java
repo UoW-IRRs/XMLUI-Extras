@@ -50,7 +50,6 @@ public class StandardReportsAction  extends AbstractAction {
         Map<String,String> returnMap = new HashMap<String,String>();
         String email = request.getParameter("email");
         String reportName = request.getParameter("report_name");
-        String requestName = REQUEST_REPORT + "_" + reportName;
         Context context = new Context();
 
         Date startDate = null;
@@ -77,27 +76,37 @@ public class StandardReportsAction  extends AbstractAction {
             }
             returnMap.put(EMAIL,email);
 
+            String problem = "";
             if(reportName == null || reportName.equals("")){
                 returnMap.put(MESSAGE,NO_REPORT);
+                problem = "missing report name";
+                if(reportName == null){
+                    reportName = "";
+                }
             } else if (email == null || email.equals("")){
                 returnMap.put(MESSAGE,NO_EMAIL);
+                problem = "missing email";
             } else if (startDate == null){
                 returnMap.put(MESSAGE,NO_START);
+                problem = "missing start date";
             } else if (endDate == null){
                 returnMap.put(MESSAGE,NO_END);
+                problem = "missing end date";
             } else if (endDate.before(startDate)){
                 returnMap.put(MESSAGE,END_BEFORE_START);
+                problem = "end date before start date";
             }
-            log.warn(LogManager.getHeader(context,requestName,"Failure sending report " + reportName + " to email address " +  email));
+            log.info(LogManager.getHeader(context,REQUEST_REPORT,reportName + " with "+ problem +" not sent to " +  email));
         } else{
             try {
                 returnMap.put(EMAIL,email);
                 ReportGenerator.emailReport(startDate, endDate, reportName, email);
                 returnMap.put(STATUS, SUCCESS);
-                log.info(LogManager.getHeader(context,requestName,"Successfully sent " + reportName + " to email address " +  email));
+                log.info(LogManager.getHeader(context,REQUEST_REPORT,reportName + " sent to " +  email));
             } catch (Exception e){
               returnMap.put(STATUS,FAILURE);
               returnMap.put(MESSAGE,ERROR);
+              log.error(LogManager.getHeader(context,REQUEST_REPORT,reportName + " failed to be sent to " +  email));
             }
         }
         try{
