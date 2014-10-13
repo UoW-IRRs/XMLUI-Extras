@@ -57,7 +57,7 @@ public class StandardReportsTransformer extends AbstractDSpaceTransformer{
 
         Select reportName = form.addItem().addSelect("report_name");
         reportName.setMultiple(false);
-        reportName.addOption("report1","All Outputs by AgResearch Groups");
+        reportName.addOption("report1","All outputs by Group and Team");
         reportName.setOptionSelected(0);
         reportName.setLabel(T_reportName_label);
         reportName.setHelp(T_reportName_help);
