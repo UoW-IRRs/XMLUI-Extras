@@ -35,6 +35,7 @@ public class StandardReportsAction  extends AbstractAction {
     public static final String MESSAGE = "message";
     public static final String START_DATE = "startDate";
     public static final String END_DATE = "endDate";
+    public static final String REPORT_NAME = "reportName";
 
     private static final String NO_REPORT = "uow.aspects.Reports.StandardReportsAction.no_report";
     private static final String NO_EMAIL = "uow.aspects.Reports.StandardReportsAction.no_email";
@@ -49,7 +50,8 @@ public class StandardReportsAction  extends AbstractAction {
         Request request = ObjectModelHelper.getRequest(map);
         Map<String,String> returnMap = new HashMap<String,String>();
         String email = request.getParameter("email");
-        String reportName = request.getParameter("report_name");
+        String reportName = request.getParameter("reportName");
+        returnMap.put(REPORT_NAME,reportName);
         Context context = new Context();
 
         Date startDate = null;
