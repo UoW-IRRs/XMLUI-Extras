@@ -13,13 +13,21 @@
         <map:matchers default="wildcard"/>
         <map:transformers>
             <map:transformer name="Navigation" src="nz.ac.waikato.its.dspace.app.xmlui.aspect.reports.Navigation"/>
-            <map:transformer name="StandardReportsTransformer" src="nz.ac.waikato.its.dspace.app.xmlui.aspect.reports.StandardReportsTransformer"/>
+            <map:transformer name="StandardReportsTransformer" src="nz.ac.waikato.its.dspace.app.xmlui.aspect.reports.IndividualReportTransformer"/>
             <map:transformer name="IncludePageMeta" src="org.dspace.app.xmlui.wing.IncludePageMeta"/>
+            <map:transformer name="ReportsListTransformer" src="nz.ac.waikato.its.dspace.app.xmlui.aspect.reports.ReportsListTransformer"/>
         </map:transformers>
 
         <map:actions>
             <map:action name="CreateStandardReports" src="nz.ac.waikato.its.dspace.app.xmlui.aspect.reports.StandardReportsAction"/>
         </map:actions>
+
+        <map:selectors>
+            <map:selector
+                    name="parameter"
+                    logger="sitemap.selector.parameter"
+                    src="org.apache.cocoon.selection.ParameterSelector"/>
+        </map:selectors>
     </map:components>
 
     <map:pipelines>
@@ -29,31 +37,52 @@
 
             <map:transform type="Navigation"/>
 
-            <!-- Match standard report page -->
             <map:match pattern="reports/standard">
+                <map:transform type="ReportsListTransformer"/>
+            </map:match>
+
+            <map:match pattern="reports/standard/*">
                 <map:match type="request" pattern="submit_report">
                     <map:act type="CreateStandardReports">
-                        <map:transform type="StandardReportsTransformer">
-                            <map:parameter name="status" value="{status}"/>
-                            <map:parameter name="email" value="{email}"/>
-                            <map:parameter name="message" value="{message}"/>
-                            <map:parameter name="startDate" value="{startDate}"/>
-                            <map:parameter name="endDate" value="{endDate}"/>
-                        </map:transform>
+                        <map:select type="parameter">
+                        <map:parameter name="parameter-selector-test" value="{status}"/>
+                            <map:when test="success">
+                                <map:transform type="ReportsListTransformer">
+                                    <map:parameter name="email" value="{email}"/>
+                                    <map:parameter name="status" value="{status}"/>
+                                    <map:parameter name="message" value="{message}"/>
+                                </map:transform>
+                                <map:transform type="IncludePageMeta">
+                                    <map:parameter name="javascript" value="scripts/reports.js" />
+                                </map:transform>
+                        </map:when>
+                        <map:otherwise>
+                            <map:transform type="StandardReportsTransformer">
+                                <map:parameter name="reportName" value="{reportName}"/>
+                                <map:parameter name="status" value="{status}"/>
+                                <map:parameter name="email" value="{email}"/>
+                                <map:parameter name="message" value="{message}"/>
+                                <map:parameter name="startDate" value="{startDate}"/>
+                                <map:parameter name="endDate" value="{endDate}"/>
+                            </map:transform>
 
-                        <map:transform type="IncludePageMeta">
-                            <map:parameter name="javascript" value="scripts/reports.js" />
-                        </map:transform>
+                            <map:transform type="IncludePageMeta">
+                                <map:parameter name="javascript" value="scripts/reports.js" />
+                            </map:transform>
+                        </map:otherwise>
+                        </map:select>
 
                         <map:serialize type="xml"/>
                     </map:act>
                 </map:match>
-                <map:transform type="StandardReportsTransformer"/>
+                <map:transform type="StandardReportsTransformer">
+                    <map:parameter name="reportName" value="{1}"/>
+                </map:transform>
                 <map:transform type="IncludePageMeta">
                     <map:parameter name="javascript" value="scripts/reports.js" />
                 </map:transform>
-            </map:match>
 
+            </map:match>
 
             <!-- Not a URL we care about, so just pass it on. -->
             <map:serialize type="xml"/>
