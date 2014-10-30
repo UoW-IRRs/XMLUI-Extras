@@ -33,11 +33,11 @@
     <message key="uow.aspects.Reports.IndividualReportTransformer.pick_values_label">Choose values for {0}</message>
     <message key="uow.aspects.Reports.IndividualReportTransformer.pick_values_help">Please select one or more values for the field <strong>{0}</strong>. Only matching outputs will be included in the report. Hint: Hold down the Ctrl or Command key to select multiple values.</message>
 
-    <message key="uow.aspects.Reports.description.report1">All outputs by AgResearch Group and Team. Normally used for Annual reporting.</message>
-    <message key="uow.aspects.Reports.description.report2">Outputs by AgResearch Group - choose one (or more) AgResearch Groups. Normally used for regular reporting of Group outputs.</message>
-    <message key="uow.aspects.Reports.description.report3">Outputs by AgResearch Team - choose one (or more) AgResearch Teams. Normally used for regular reporting of Team outputs.</message>
-    <message key="uow.aspects.Reports.description.report4">Outputs by Client - choose one (or more) Clients. Normally used for regular reporting of outputs done for a particular client.</message>
-    <message key="uow.aspects.Reports.description.report5">Outputs by Funder - choose one (or more) funders. Normally used for regular reporting of outputs done for a particular funder.</message>
+    <message key="uow.aspects.Reports.description.all-outputs-with-group-and-team">All outputs by AgResearch Group and Team. Normally used for Annual reporting.</message>
+    <message key="uow.aspects.Reports.description.group-outputs">Outputs by AgResearch Group - choose one (or more) AgResearch Groups. Normally used for regular reporting of Group outputs.</message>
+    <message key="uow.aspects.Reports.description.team-outputs">Outputs by AgResearch Team - choose one (or more) AgResearch Teams. Normally used for regular reporting of Team outputs.</message>
+    <message key="uow.aspects.Reports.description.client-outputs">Outputs by Client - choose one (or more) Clients. Normally used for regular reporting of outputs done for a particular client.</message>
+    <message key="uow.aspects.Reports.description.funder-outputs">Outputs by Funder - choose one (or more) funders. Normally used for regular reporting of outputs done for a particular funder.</message>
 
     <message key="uow.aspects.Reports.StandardReportsAction.no_email">Please provide a valid email address.</message>
     <message key="uow.aspects.Reports.StandardReportsAction.no_report">Please choose a standard report.</message>
