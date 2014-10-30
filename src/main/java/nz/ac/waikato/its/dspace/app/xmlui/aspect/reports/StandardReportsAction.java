@@ -1,24 +1,21 @@
 package nz.ac.waikato.its.dspace.app.xmlui.aspect.reports;
 
 import nz.ac.waikato.its.dspace.reporting.ReportGenerator;
+import nz.ac.waikato.its.dspace.reporting.configuration.Field;
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.cocoon.acting.AbstractAction;
 import org.apache.cocoon.environment.ObjectModelHelper;
 import org.apache.cocoon.environment.Redirector;
 import org.apache.cocoon.environment.Request;
 import org.apache.cocoon.environment.SourceResolver;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.dspace.app.xmlui.utils.ContextUtil;
-import org.dspace.app.xmlui.wing.Message;
 import org.dspace.core.Context;
 import org.dspace.core.LogManager;
 
+import javax.servlet.ServletRequest;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.dspace.app.xmlui.wing.AbstractWingTransformer.message;
 
@@ -104,7 +101,8 @@ public class StandardReportsAction  extends AbstractAction {
         } else{
             try {
                 returnMap.put(EMAIL,email);
-                ReportGenerator.emailReport(startDate, endDate, reportName, email);
+	            Map<String, List<String>> pickedValues = findPickedValues(request);
+                ReportGenerator.emailReport(startDate, endDate, reportName, email, pickedValues);
                 returnMap.put(STATUS, SUCCESS);
                 log.info(LogManager.getHeader(context,REQUEST_REPORT,reportName + " sent to " +  email));
             } catch (Exception e){
@@ -115,4 +113,19 @@ public class StandardReportsAction  extends AbstractAction {
         }
         return returnMap;
     }
+
+	private Map<String, List<String>> findPickedValues(ServletRequest request) {
+		Map<String, List<String>> result = new HashMap<>();
+		Enumeration params = request.getParameterNames();
+		while (params.hasMoreElements()) {
+			Object name = params.nextElement();
+			if (!name.toString().startsWith("values-")) {
+				continue; // not a pick value parameter, ignore
+			}
+			String field = name.toString().substring("values-".length());
+			String[] values = request.getParameterValues(name.toString());
+			result.put(field, Arrays.asList(values));
+		}
+		return result;
+	}
 }

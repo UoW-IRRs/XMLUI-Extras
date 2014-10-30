@@ -1,8 +1,10 @@
 package nz.ac.waikato.its.dspace.app.xmlui.aspect.reports;
 
 import nz.ac.waikato.its.dspace.reporting.ReportConfigurationService;
-import nz.ac.waikato.its.dspace.reporting.configuration.ConfigurationException;
-import nz.ac.waikato.its.dspace.reporting.configuration.Report;
+import nz.ac.waikato.its.dspace.reporting.ReportGenerator;
+import nz.ac.waikato.its.dspace.reporting.ReportingException;
+import nz.ac.waikato.its.dspace.reporting.configuration.*;
+import nz.ac.waikato.its.dspace.reporting.configuration.Field;
 import org.apache.cocoon.ProcessingException;
 import org.apache.log4j.Logger;
 import org.dspace.app.xmlui.cocoon.AbstractDSpaceTransformer;
@@ -10,6 +12,7 @@ import org.dspace.app.xmlui.utils.UIException;
 import org.dspace.app.xmlui.wing.Message;
 import org.dspace.app.xmlui.wing.WingException;
 import org.dspace.app.xmlui.wing.element.*;
+import org.dspace.app.xmlui.wing.element.List;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.core.ConfigurationManager;
 import org.xml.sax.SAXException;
@@ -46,18 +49,21 @@ public class IndividualReportTransformer extends AbstractDSpaceTransformer{
         ReportConfigurationService configurationService = new ReportConfigurationService(configDir);
         String reportName = parameters.getParameter("reportName", "");
 
-        if(!reportName.equals("")){
-        try {
-            Report requestedReport = configurationService.getCannedReportConfiguration(reportName);
-            report.setHead(requestedReport.getTitle());
-        } catch (ConfigurationException e) {
-            report.setHead(T_report_standard_name);
-            log.error("Unable to load report from configuration");
+	    Report requestedReport = null;
+        if(!reportName.equals("")) {
+	        try {
+		        requestedReport = configurationService.getCannedReportConfiguration(reportName);
+	        } catch (ConfigurationException e) {
+		        report.setHead(T_report_standard_name);
+		        log.error("Unable to load report from configuration");
+	        }
         }
-        } else{
-            log.error("Report name parameter is missing");
-            throw new ProcessingException("Unable to load report from configuration");
+        if (requestedReport == null) {
+	        log.error("Cannot find requested report, name " + reportName);
+	        throw new ProcessingException("Unable to load report from configuration");
         }
+
+	    report.setHead(requestedReport.getTitle());
 
         String success = parameters.getParameter(StandardReportsAction.STATUS,"");
         if(success.equals(StandardReportsAction.SUCCESS)){
@@ -86,7 +92,12 @@ public class IndividualReportTransformer extends AbstractDSpaceTransformer{
         endDateText.setLabel(T_end_date_label);
         endDateText.setHelp(T_end_date_help);
 
-        Text emailAddressField = form.addItem().addText("email");
+	    java.util.List<Field> fields = requestedReport.getFields();
+	    for (Field field : fields) {
+		    addFieldOptions(form, requestedReport, field);
+	    }
+
+	    Text emailAddressField = form.addItem().addText("email");
         emailAddressField.setLabel(T_email_address_label);
         emailAddressField.setHelp(T_email_address_help);
 
@@ -99,7 +110,30 @@ public class IndividualReportTransformer extends AbstractDSpaceTransformer{
         div.addPara().addButton("submit_report").setValue(T_submit);
     }
 
-    private void prepopulateValue(String reportsActionName,Text field) throws WingException {
+	private void addFieldOptions(List form, Report report, Field field) throws WingException, UIException {
+		if (field.getValuesMode() == Field.ValuesMode.ALL || field.getValuesMode() == Field.ValuesMode.SEARCH) {
+			return; // do nothing for these types -- TODO later implement search mode
+		}
+		try {
+			java.util.List<String> pickableValues = ReportGenerator.getPickableValues(report, field);
+			if (pickableValues.isEmpty()) {
+				return; // do nothing if there are no values -- TODO revisit this decision, doesn't this mean there will be no data?
+			}
+			Select pickSelect = form.addItem().addSelect("values-" + field.getName());
+			pickSelect.setLabel("Included values");
+			pickSelect.setHelp("Report only on outputs whose " + field.getHeader() + " is one of the selected values.");
+			pickSelect.setMultiple(true);
+			pickSelect.setRequired(false);
+			for (String value : pickableValues) {
+				pickSelect.addOption(value, value);
+			}
+		} catch (ReportingException e) {
+			log.error("Cannot find pickable values for field");
+			throw new UIException(e);
+		}
+	}
+
+	private void prepopulateValue(String reportsActionName,Text field) throws WingException {
         String preSetValues;
         preSetValues = parameters.getParameter(reportsActionName,"");
         if(!preSetValues.equals("")){
