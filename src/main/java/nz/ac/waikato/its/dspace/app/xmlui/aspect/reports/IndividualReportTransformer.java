@@ -39,8 +39,10 @@ public class IndividualReportTransformer extends AbstractDSpaceTransformer{
     private static final Message T_start_date_help = message("uow.aspects.Reports.IndividualReportTransformer.start_date_help");
     private static final Message T_end_date_label = message("uow.aspects.Reports.IndividualReportTransformer.end_date_label");
     private static final Message T_end_date_help = message("uow.aspects.Reports.IndividualReportTransformer.end_date_help");
+	private static final Message T_pick_values_label = message("uow.aspects.Reports.IndividualReportTransformer.pick_values_label");
+	private static final Message T_pick_values_help = message("uow.aspects.Reports.IndividualReportTransformer.pick_values_help");
 
-    @Override
+	@Override
     public void addBody(Body body) throws SAXException, WingException, UIException, SQLException, IOException, AuthorizeException, ProcessingException {
         Division reportHome = body.addDivision("standard-report-home");
         Division report = reportHome.addDivision("standard-report-div","standard-report");
@@ -65,7 +67,14 @@ public class IndividualReportTransformer extends AbstractDSpaceTransformer{
 
 	    report.setHead(requestedReport.getTitle());
 
-        String success = parameters.getParameter(StandardReportsAction.STATUS,"");
+	    List reportInfo = report.addList("report-info", List.TYPE_FORM, "report-info");
+	    try {
+		    ReportUtils.addReportEntry(contextPath, reportInfo, requestedReport);
+	    } catch (ConfigurationException e) {
+		    log.warn("Cannot add report information, encountered exception " + e.getMessage(), e);
+	    }
+
+	    String success = parameters.getParameter(StandardReportsAction.STATUS,"");
         if(success.equals(StandardReportsAction.SUCCESS)){
             report.addDivision("general-message","notice success alert alert-success").addPara(T_success.parameterize(parameters.getParameter(StandardReportsAction.EMAIL, "")));
         } else if(success.equals(StandardReportsAction.FAILURE)){
@@ -105,6 +114,7 @@ public class IndividualReportTransformer extends AbstractDSpaceTransformer{
             prepopulateValue(StandardReportsAction.EMAIL,emailAddressField);
             prepopulateValue(StandardReportsAction.START_DATE,startDateText);
             prepopulateValue(StandardReportsAction.END_DATE,endDateText);
+	        // TODO prepopulate pick values?
         }
 
         div.addPara().addButton("submit_report").setValue(T_submit);
@@ -117,11 +127,12 @@ public class IndividualReportTransformer extends AbstractDSpaceTransformer{
 		try {
 			java.util.List<String> pickableValues = ReportGenerator.getPickableValues(report, field);
 			if (pickableValues.isEmpty()) {
-				return; // do nothing if there are no values -- TODO revisit this decision, doesn't this mean there will be no data?
+				return; // do nothing if there are no values -- TODO revisit this decision, doesn't this mean there will be no data in the report?
 			}
 			Select pickSelect = form.addItem().addSelect("values-" + field.getName());
-			pickSelect.setLabel("Included values");
-			pickSelect.setHelp("Report only on outputs whose " + field.getHeader() + " is one of the selected values.");
+			String header = field.getHeader().replaceAll("_", " ");
+			pickSelect.setLabel(T_pick_values_label.parameterize(header));
+			pickSelect.setHelp(T_pick_values_help.parameterize(header));
 			pickSelect.setMultiple(true);
 			pickSelect.setRequired(false);
 			for (String value : pickableValues) {

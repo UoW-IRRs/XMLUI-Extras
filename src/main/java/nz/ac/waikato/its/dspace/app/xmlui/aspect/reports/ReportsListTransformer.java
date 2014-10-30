@@ -2,7 +2,7 @@ package nz.ac.waikato.its.dspace.app.xmlui.aspect.reports;
 
 import nz.ac.waikato.its.dspace.reporting.ReportConfigurationService;
 import nz.ac.waikato.its.dspace.reporting.configuration.ConfigurationException;
-import nz.ac.waikato.its.dspace.reporting.configuration.Field;
+import nz.ac.waikato.its.dspace.reporting.configuration.Report;
 import org.apache.cocoon.ProcessingException;
 import org.apache.log4j.Logger;
 import org.dspace.app.xmlui.cocoon.AbstractDSpaceTransformer;
@@ -32,7 +32,7 @@ public class ReportsListTransformer extends AbstractDSpaceTransformer {
     private static final Message T_fail = message("uow.aspects.Reports.fail");
     private static final Message T_report_loading_fail = message("uow.aspects.Reports.ReportsListTransformer.fail");
 
-    @Override
+	@Override
     public void addBody(Body body) throws SAXException, WingException, UIException, SQLException, IOException, AuthorizeException, ProcessingException {
         Division reportHome = body.addDivision("standard-report-home");
         Division report = reportHome.addDivision("standard-report-div","standard-report");
@@ -58,19 +58,11 @@ public class ReportsListTransformer extends AbstractDSpaceTransformer {
         try {
             List<String> reportNames = configurationService.getCannedReportNames();
             for (String reportName : reportNames) {
-                //Item reportEntryItem = form.addItem();
-                org.dspace.app.xmlui.wing.element.List reportEntry = form.addList("report-entry", org.dspace.app.xmlui.wing.element.List.TYPE_FORM);
-                String reportTitle = configurationService.getCannedReportConfiguration(reportName).getTitle();
-                List<Field> fields = configurationService.getCannedReportConfiguration(reportName).getFields();
-                reportEntry.addItem("report-link","report-link").addXref(contextPath + "/reports/standard/" + reportName,reportTitle);
-                reportEntry.addItem("report-decsription","report-description").addContent(message("uow.aspects.Reports.description."+reportName));
-                String fieldNames = "Including the following fields: ";
-                for(Field field : fields){
-                   fieldNames= fieldNames + field.getHeader().replace("_"," ") + " | ";
-                }
-                if(!fieldNames.equals("|")){
-                    reportEntry.addItem("report-fields","report-fields").addContent(fieldNames.substring(0,fieldNames.length()-3));
-                }
+	            Report requestedReport = configurationService.getCannedReportConfiguration(reportName);
+	            org.dspace.app.xmlui.wing.element.List reportEntry = form.addList("report-info-" + reportName, org.dspace.app.xmlui.wing.element.List.TYPE_FORM, "report-info");
+	            String reportTitle = requestedReport.getTitle();
+	            reportEntry.addItem("report-link-" + reportName, "report-link").addXref(contextPath + "/reports/standard/" + requestedReport.getId(),reportTitle);
+	            ReportUtils.addReportEntry(contextPath, reportEntry, requestedReport);
             }
         } catch (ConfigurationException e) {
             log.error("Unable to show list of all standard reports",e);
@@ -79,7 +71,7 @@ public class ReportsListTransformer extends AbstractDSpaceTransformer {
         }
     }
 
-    @Override
+	@Override
     public void addPageMeta(PageMeta pageMeta) throws SAXException, WingException, UIException, SQLException, IOException, AuthorizeException {
         pageMeta.addMetadata("title").addContent(T_title);
         pageMeta.addTrailLink(contextPath + "/",T_dspace_home);

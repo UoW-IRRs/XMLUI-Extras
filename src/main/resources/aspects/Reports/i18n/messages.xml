@@ -23,13 +23,16 @@
     <message key="uow.aspects.Reports.dspace_home">AgScite Home</message>
     <message key="uow.aspects.Reports.fail">The system failed to send the requested report.</message>
     <message key="uow.aspects.Reports.IndividualReportTransformer.email_address_label">Your email address</message>
-    <message key="uow.aspects.Reports.IndividualReportTransformer.email_address_help">Please enter a valid email address to receive the report</message>
+    <message key="uow.aspects.Reports.IndividualReportTransformer.email_address_help">Please enter a valid email address to receive the report. Required field.</message>
     <message key="uow.aspects.Reports.IndividualReportTransformer.submit">Request report</message>
-    <message key="uow.aspects.Reports.success">The report has been sent successfully to {0}</message>
+    <message key="uow.aspects.Reports.success">The report has been sent successfully to {0}.</message>
     <message key="uow.aspects.Reports.IndividualReportTransformer.start_date_label">Start date</message>
     <message key="uow.aspects.Reports.IndividualReportTransformer.end_date_label">End date</message>
-    <message key="uow.aspects.Reports.IndividualReportTransformer.start_date_help">Please provide a start date for the reporting in the format yyyy-mm-dd</message>
-    <message key="uow.aspects.Reports.IndividualReportTransformer.end_date_help">Please provide an end date for the reporting in the format yyyy-mm-dd</message>
+    <message key="uow.aspects.Reports.IndividualReportTransformer.start_date_help">Please provide a start date for the reporting in the format yyyy-mm-dd. Required field.</message>
+    <message key="uow.aspects.Reports.IndividualReportTransformer.end_date_help">Please provide an end date for the reporting in the format yyyy-mm-dd. Required field.</message>
+    <message key="uow.aspects.Reports.IndividualReportTransformer.pick_values_label">Choose values for {0}</message>
+    <message key="uow.aspects.Reports.IndividualReportTransformer.pick_values_help">Please select one or more values for the field <strong>{0}</strong>. Only matching outputs will be included in the report. Hint: Hold down the Ctrl or Command key to select multiple values.</message>
+
     <message key="uow.aspects.Reports.description.report1">All outputs by AgResearch Group and Team. Normally used for Annual reporting.</message>
     <message key="uow.aspects.Reports.description.report2">Outputs by AgResearch Group - choose one (or more) AgResearch Groups. Normally used for regular reporting of Group outputs.</message>
     <message key="uow.aspects.Reports.description.report3">Outputs by AgResearch Team - choose one (or more) AgResearch Teams. Normally used for regular reporting of Team outputs.</message>
@@ -47,4 +50,6 @@
     <message key="uow.aspects.Reports.ReportsListTransformer.title">Standard Reports</message>
     <message key="uow.aspects.Reports.ReportsListTransformer.trail">Standard Reports</message>
     <message key="uow.aspects.Reports.ReportsListTransformer.fail">The system failed to load the reports. Please try again later or contact the AgScite administrator if problem persists.</message>
+
+    <message key="uow.aspects.Reports.field-names">Fields included: {0}</message>
 </catalogue>
