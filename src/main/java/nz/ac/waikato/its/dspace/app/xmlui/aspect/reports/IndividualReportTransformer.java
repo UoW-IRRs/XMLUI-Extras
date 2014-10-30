@@ -42,6 +42,7 @@ public class IndividualReportTransformer extends AbstractDSpaceTransformer{
 	private static final Message T_pick_values_label = message("uow.aspects.Reports.IndividualReportTransformer.pick_values_label");
 	private static final Message T_pick_values_help = message("uow.aspects.Reports.IndividualReportTransformer.pick_values_help");
 	private static final Message T_cancel = message("xmlui.general.cancel");
+	private static final Message T_no_pick_values = message("uow.aspects.Reports.IndividualReportTransformer.no_pick_values");
 
 	@Override
     public void addBody(Body body) throws SAXException, WingException, UIException, SQLException, IOException, AuthorizeException, ProcessingException {
@@ -127,18 +128,19 @@ public class IndividualReportTransformer extends AbstractDSpaceTransformer{
 			return; // do nothing for these types -- TODO later implement search mode
 		}
 		try {
+			String header = field.getHeader().replaceAll("_", " ");
 			java.util.List<String> pickableValues = ReportGenerator.getPickableValues(report, field);
 			if (pickableValues.isEmpty()) {
-				return; // do nothing if there are no values -- TODO revisit this decision, doesn't this mean there will be no data in the report?
-			}
-			Select pickSelect = form.addItem().addSelect("values-" + field.getName());
-			String header = field.getHeader().replaceAll("_", " ");
-			pickSelect.setLabel(T_pick_values_label.parameterize(header));
-			pickSelect.setHelp(T_pick_values_help.parameterize(header));
-			pickSelect.setMultiple(true);
-			pickSelect.setRequired(false);
-			for (String value : pickableValues) {
-				pickSelect.addOption(value, value);
+				form.addItem("values-" + field.getName(), "notice danger alert alert-danger").addContent(T_no_pick_values.parameterize(header));
+			} else {
+				Select pickSelect = form.addItem().addSelect("values-" + field.getName());
+				pickSelect.setLabel(T_pick_values_label.parameterize(header));
+				pickSelect.setHelp(T_pick_values_help.parameterize(header));
+				pickSelect.setMultiple(true);
+				pickSelect.setRequired(false);
+				for (String value : pickableValues) {
+					pickSelect.addOption(value, value);
+				}
 			}
 		} catch (ReportingException e) {
 			log.error("Cannot find pickable values for field");

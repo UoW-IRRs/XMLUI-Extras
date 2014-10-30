@@ -29,6 +29,7 @@
     <message key="uow.aspects.Reports.IndividualReportTransformer.end_date_help">Please provide an end date for the reporting in the format yyyy-mm-dd. Required field.</message>
     <message key="uow.aspects.Reports.IndividualReportTransformer.pick_values_label">Choose values for {0}</message>
     <message key="uow.aspects.Reports.IndividualReportTransformer.pick_values_help">Please select one or more values for the field <strong>{0}</strong>. Only matching outputs will be included in the report. Hint: Hold down the Ctrl or Command key to select multiple values.</message>
+    <message key="uow.aspects.Reports.IndividualReportTransformer.no_pick_values">No values were found for the field <strong>{0}</strong>. If you proceed, this means the report will contain no data.</message>
 
     <message key="uow.aspects.Reports.fail">The system failed to send the requested report.</message>
     <message key="uow.aspects.Reports.success">The report has been sent successfully to {0}.</message>
