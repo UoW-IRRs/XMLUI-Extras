@@ -28,7 +28,7 @@ public class IndividualReportTransformer extends AbstractDSpaceTransformer{
 
     private static final Message T_report_standard_name = message("uow.aspects.Reports.IndividualReportTransformer.home_head");
     private static final Message T_title = message("uow.aspects.Reports.IndividualReportTransformer.title");
-    private static final Message T_dspace_home = message("uow.aspects.Reports.dspace_home");
+    private static final Message T_dspace_home = message("xmlui.general.dspace_home");
     private static final Message T_trail = message("uow.aspects.Reports.IndividualReportTransformer.trail");
     private static final Message T_email_address_label = message("uow.aspects.Reports.IndividualReportTransformer.email_address_label");
     private static final Message T_email_address_help = message("uow.aspects.Reports.IndividualReportTransformer.email_address_help");
@@ -41,6 +41,7 @@ public class IndividualReportTransformer extends AbstractDSpaceTransformer{
     private static final Message T_end_date_help = message("uow.aspects.Reports.IndividualReportTransformer.end_date_help");
 	private static final Message T_pick_values_label = message("uow.aspects.Reports.IndividualReportTransformer.pick_values_label");
 	private static final Message T_pick_values_help = message("uow.aspects.Reports.IndividualReportTransformer.pick_values_help");
+	private static final Message T_cancel = message("xmlui.general.cancel");
 
 	@Override
     public void addBody(Body body) throws SAXException, WingException, UIException, SQLException, IOException, AuthorizeException, ProcessingException {
@@ -116,8 +117,9 @@ public class IndividualReportTransformer extends AbstractDSpaceTransformer{
             prepopulateValue(StandardReportsAction.END_DATE,endDateText);
 	        // TODO prepopulate pick values?
         }
-
-        div.addPara().addButton("submit_report").setValue(T_submit);
+		Para actions = div.addPara();
+		actions.addButton("submit_report", "btn-primary").setValue(T_submit);
+		actions.addButton("submit_cancel").setValue(T_cancel);
     }
 
 	private void addFieldOptions(List form, Report report, Field field) throws WingException, UIException {

@@ -26,7 +26,7 @@ public class ReportsListTransformer extends AbstractDSpaceTransformer {
 
     private static final Message T_standard_report = message("uow.aspects.Reports.ReportsListTransformer.home_head");
     private static final Message T_title = message("uow.aspects.Reports.ReportsListTransformer.title");
-    private static final Message T_dspace_home = message("uow.aspects.Reports.dspace_home");
+    private static final Message T_dspace_home = message("xmlui.general.dspace_home");
     private static final Message T_trail = message("uow.aspects.Reports.ReportsListTransformer.trail");
     private static final Message T_success = message("uow.aspects.Reports.success");
     private static final Message T_fail = message("uow.aspects.Reports.fail");
