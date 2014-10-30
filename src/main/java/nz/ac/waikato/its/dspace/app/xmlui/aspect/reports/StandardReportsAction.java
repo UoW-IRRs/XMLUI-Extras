@@ -9,6 +9,7 @@ import org.apache.cocoon.environment.Request;
 import org.apache.cocoon.environment.SourceResolver;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.dspace.app.xmlui.utils.ContextUtil;
 import org.dspace.app.xmlui.wing.Message;
 import org.dspace.core.Context;
 import org.dspace.core.LogManager;
@@ -48,11 +49,12 @@ public class StandardReportsAction  extends AbstractAction {
     @Override
     public Map act(Redirector redirector, SourceResolver sourceResolver, Map map, String s, Parameters parameters) throws Exception {
         Request request = ObjectModelHelper.getRequest(map);
+	    Context context = ContextUtil.obtainContext(request);
+
         Map<String,String> returnMap = new HashMap<String,String>();
         String email = request.getParameter("email");
         String reportName = request.getParameter("reportName");
         returnMap.put(REPORT_NAME,reportName);
-        Context context = new Context();
 
         Date startDate = null;
         Date endDate = null;
@@ -109,19 +111,6 @@ public class StandardReportsAction  extends AbstractAction {
               returnMap.put(STATUS,FAILURE);
               returnMap.put(MESSAGE,ERROR);
               log.error(LogManager.getHeader(context,REQUEST_REPORT,reportName + " failed to be sent to " +  email));
-            }
-        }
-        try{
-            context.complete();
-            context = null;
-
-        } catch (Exception e){
-            if(context != null && context.isValid()){
-                context.abort();
-            }
-        } finally {
-            if(context != null && context.isValid()){
-                context.abort();
             }
         }
         return returnMap;
