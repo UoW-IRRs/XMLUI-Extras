@@ -119,8 +119,8 @@ public class IndividualReportTransformer extends AbstractDSpaceTransformer{
 	        // TODO prepopulate pick values?
         }
 		Para actions = div.addPara();
-		actions.addButton("submit_report", "btn-primary").setValue(T_submit);
-		actions.addButton("submit_cancel").setValue(T_cancel);
+		actions.addButton("submit_report").setValue(T_submit);
+		//actions.addButton("submit_cancel").setValue(T_cancel);
     }
 
 	private void addFieldOptions(List form, Report report, Field field) throws WingException, UIException {
