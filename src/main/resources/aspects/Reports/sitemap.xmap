@@ -18,10 +18,6 @@
             <map:transformer name="ReportsListTransformer" src="nz.ac.waikato.its.dspace.app.xmlui.aspect.reports.ReportsListTransformer"/>
         </map:transformers>
 
-        <map:actions>
-            <map:action name="CreateStandardReports" src="nz.ac.waikato.its.dspace.app.xmlui.aspect.reports.StandardReportsAction"/>
-        </map:actions>
-
         <map:selectors>
             <map:selector
                     name="parameter"
@@ -30,58 +26,61 @@
         </map:selectors>
     </map:components>
 
+    <map:flow language="javascript">
+        <map:script src="reports.js"/>
+    </map:flow>
+
     <map:pipelines>
         <map:pipeline>
+            <map:match pattern="reports/standard/*">
+                <map:match type="request" pattern="reports-continue">
+                    <map:call continuation="{1}"/>
+                </map:match>
+
+                <map:call function="startSendStandardReport">
+                    <map:parameter name="reportName" value="{1}"/>
+                </map:call>
+            </map:match>
 
             <map:generate/>
 
             <map:transform type="Navigation"/>
 
-            <map:match pattern="reports/standard">
-                <map:transform type="ReportsListTransformer"/>
-            </map:match>
-
-            <map:match pattern="reports/standard/*">
-                <map:match type="request" pattern="submit_report">
-                    <map:act type="CreateStandardReports">
-                        <map:select type="parameter">
-                        <map:parameter name="parameter-selector-test" value="{status}"/>
-                            <map:when test="success">
-                                <map:transform type="ReportsListTransformer">
-                                    <map:parameter name="email" value="{email}"/>
-                                    <map:parameter name="status" value="{status}"/>
-                                    <map:parameter name="message" value="{message}"/>
-                                </map:transform>
-                                <map:transform type="IncludePageMeta">
-                                    <map:parameter name="javascript" value="scripts/reports.js" />
-                                </map:transform>
-                        </map:when>
-                        <map:otherwise>
-                            <map:transform type="StandardReportsTransformer">
-                                <map:parameter name="reportName" value="{reportName}"/>
-                                <map:parameter name="status" value="{status}"/>
-                                <map:parameter name="email" value="{email}"/>
-                                <map:parameter name="message" value="{message}"/>
-                                <map:parameter name="startDate" value="{startDate}"/>
-                                <map:parameter name="endDate" value="{endDate}"/>
-                            </map:transform>
-
-                            <map:transform type="IncludePageMeta">
-                                <map:parameter name="javascript" value="scripts/reports.js" />
-                            </map:transform>
-                        </map:otherwise>
-                        </map:select>
-
-                        <map:serialize type="xml"/>
-                    </map:act>
-                </map:match>
-                <map:transform type="StandardReportsTransformer">
-                    <map:parameter name="reportName" value="{1}"/>
-                </map:transform>
+            <map:match pattern="reports/standard/**">
                 <map:transform type="IncludePageMeta">
                     <map:parameter name="javascript" value="scripts/reports.js" />
                 </map:transform>
 
+                <map:match type="WildcardParameterMatcher" pattern="true">
+                    <map:parameter name="parameter-name" value="notice"/>
+                    <map:parameter name="notice" value="{flow-attribute:notice}"/>
+                    <map:transform type="notice">
+                        <map:parameter name="outcome" value="{flow-attribute:outcome}"/>
+                        <map:parameter name="header" value="{flow-attribute:header}"/>
+                        <map:parameter name="message" value="{flow-attribute:message}"/>
+                        <map:parameter name="characters" value="{flow-attribute:characters}"/>
+                    </map:transform>
+                </map:match>
+            </map:match>
+
+            <map:match pattern="reports/standard">
+                <map:transform type="ReportsListTransformer"/>
+            </map:match>
+
+            <!-- pages reached via flowscript -->
+            <map:match type="WildcardParameterMatcher" pattern="true">
+                <map:parameter name="parameter-name" value="flow"/>
+                <map:parameter name="flow" value="{flow-attribute:flow}"/>
+
+                <map:match pattern="reports/standard/*/settings">
+                    <map:transform type="StandardReportsTransformer">
+                        <map:parameter name="reportName" value="{1}"/>
+                        <map:parameter name="email" value="{flow-attribute:email}"/>
+                        <map:parameter name="startDate" value="{flow-attribute:startDate}"/>
+                        <map:parameter name="endDate" value="{flow-attribute:startDate}"/>
+                        <map:parameter name="errors" value="{flow-attribute:errors}"/>
+                    </map:transform>
+                </map:match>
             </map:match>
 
             <!-- Not a URL we care about, so just pass it on. -->

@@ -38,18 +38,6 @@ public class ReportsListTransformer extends AbstractDSpaceTransformer {
         Division report = reportHome.addDivision("standard-report-div","standard-report");
         report.setHead(T_standard_report);
 
-        String success = parameters.getParameter(StandardReportsAction.STATUS,"");
-        if(success.equals(StandardReportsAction.SUCCESS)){
-            report.addDivision("general-message","notice success alert alert-success").addPara(T_success.parameterize(parameters.getParameter(StandardReportsAction.EMAIL, "")));
-        } else if(success.equals(StandardReportsAction.FAILURE)){
-            Division noticeDiv = report.addDivision("general-message", "notice danger alert alert-danger");
-            noticeDiv.addPara(T_fail);
-            String message = parameters.getParameter(StandardReportsAction.MESSAGE,"");
-            if(!message.equals("")){
-                noticeDiv.addPara(message(message));
-            }
-        }
-
         Division div = report.addInteractiveDivision("standard-report-list", contextPath + "/reports/standard", Division.METHOD_POST);
         org.dspace.app.xmlui.wing.element.List form = div.addList("choose-reports", org.dspace.app.xmlui.wing.element.List.TYPE_FORM);
 
@@ -62,7 +50,7 @@ public class ReportsListTransformer extends AbstractDSpaceTransformer {
 	            org.dspace.app.xmlui.wing.element.List reportEntry = form.addList("report-info-" + reportName, org.dspace.app.xmlui.wing.element.List.TYPE_FORM, "report-info");
 	            String reportTitle = requestedReport.getTitle();
 	            reportEntry.addItem("report-link-" + reportName, "report-link").addXref(contextPath + "/reports/standard/" + requestedReport.getId(),reportTitle);
-	            ReportUtils.addReportEntry(contextPath, reportEntry, requestedReport);
+	            ReportUtils.addReportEntry(reportEntry, requestedReport);
             }
         } catch (ConfigurationException e) {
             log.error("Unable to show list of all standard reports",e);
