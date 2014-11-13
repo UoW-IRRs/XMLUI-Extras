@@ -78,9 +78,10 @@ public class IndividualReportTransformer extends AbstractDSpaceTransformer{
 
 		report.setHead(requestedReport.getTitle());
 
-	    List reportInfo = report.addList("report-info", List.TYPE_FORM, "report-info");
+
+		Division reportEntry = report.addDivision("report-info-" + requestedReport.getId(), "report-info panel panel-default");
 	    try {
-		    ReportUtils.addReportEntry(reportInfo, requestedReport);
+		    ReportUtils.addReportEntry(reportEntry, requestedReport);
 	    } catch (ConfigurationException e) {
 		    log.warn("Cannot add report information, encountered exception " + e.getMessage(), e);
 	    }

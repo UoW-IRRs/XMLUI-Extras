@@ -43,23 +43,21 @@ public class ReportsListTransformer extends AbstractDSpaceTransformer {
 
 		div.addPara(T_intro);
 
-        org.dspace.app.xmlui.wing.element.List form = div.addList("choose-reports", org.dspace.app.xmlui.wing.element.List.TYPE_FORM);
-
         String configDir = ConfigurationManager.getProperty("dspace.dir") + "/config/modules/reporting";
         ReportConfigurationService configurationService = new ReportConfigurationService(configDir);
         try {
             List<String> reportNames = configurationService.getCannedReportNames();
             for (String reportName : reportNames) {
 	            Report requestedReport = configurationService.getCannedReportConfiguration(reportName);
-	            org.dspace.app.xmlui.wing.element.List reportEntry = form.addList("report-info-" + reportName, org.dspace.app.xmlui.wing.element.List.TYPE_FORM, "report-info");
+	            String reportId = requestedReport.getId();
+	            Division reportEntry = div.addDivision("report-info-" + reportId, "report-info panel panel-default");
 	            String reportTitle = requestedReport.getTitle();
-	            reportEntry.addItem("report-link-" + reportName, "report-link").addXref(contextPath + "/reports/standard/" + requestedReport.getId(),reportTitle);
+	            reportEntry.addDivision("report-title-" + reportId, "panel-heading").addPara("report-link-" + reportId, "panel-title").addXref(contextPath + "/reports/standard/" + reportId, reportTitle);
 	            ReportUtils.addReportEntry(reportEntry, requestedReport);
             }
         } catch (ConfigurationException e) {
             log.error("Unable to show list of all standard reports",e);
-            Item reportEntry = form.addItem();
-            reportEntry.addContent(T_report_loading_fail);
+            div.addPara(T_report_loading_fail);
         }
     }
 

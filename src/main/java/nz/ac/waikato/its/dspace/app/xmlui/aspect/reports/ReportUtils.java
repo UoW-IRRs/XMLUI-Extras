@@ -11,6 +11,7 @@ import org.dspace.app.xmlui.aspect.administrative.FlowResult;
 import org.dspace.app.xmlui.wing.AbstractWingTransformer;
 import org.dspace.app.xmlui.wing.Message;
 import org.dspace.app.xmlui.wing.WingException;
+import org.dspace.app.xmlui.wing.element.Division;
 import org.dspace.core.Context;
 import org.dspace.core.LogManager;
 
@@ -40,8 +41,9 @@ public class ReportUtils {
 	private static final Message T_success_message = new Message("", "uow.aspects.Reports.success");
 	private static final Message T_fail_message = new Message("", "uow.aspects.Reports.fail");
 
-	static void addReportEntry(org.dspace.app.xmlui.wing.element.List parent, Report report) throws WingException, ConfigurationException {
-		parent.addItem("report-description-" + report.getId(), "report-description").addContent(AbstractWingTransformer.message("uow.aspects.Reports.description." + report.getId()));
+	static void addReportEntry(Division parent, Report report) throws WingException, ConfigurationException {
+		Division div = parent.addDivision("report-info-" + report.getId(), "report-info panel-body");
+		div.addPara("report-description-" + report.getId(), "report-description").addContent(AbstractWingTransformer.message("uow.aspects.Reports.description." + report.getId()));
 		List<Field> fields = report.getFields();
 		String fieldNames = "";
 		boolean first = true;
@@ -54,7 +56,7 @@ public class ReportUtils {
 		   fieldNames += field.getHeader().replace("_"," ");
 		}
 		if(!fieldNames.equals("|")){
-		    parent.addItem("report-fields-" + report.getId(), "report-fields").addContent(T_field_names.parameterize(fieldNames));
+		    div.addPara("report-fields-" + report.getId(), "report-fields").addContent(T_field_names.parameterize(fieldNames));
 		}
 	}
 
