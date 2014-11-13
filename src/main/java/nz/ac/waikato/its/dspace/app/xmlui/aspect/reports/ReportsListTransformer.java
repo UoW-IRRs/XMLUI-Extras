@@ -31,6 +31,7 @@ public class ReportsListTransformer extends AbstractDSpaceTransformer {
     private static final Message T_success = message("uow.aspects.Reports.success");
     private static final Message T_fail = message("uow.aspects.Reports.fail");
     private static final Message T_report_loading_fail = message("uow.aspects.Reports.ReportsListTransformer.fail");
+	private static final Message T_intro = message("uow.aspects.Reports.ReportsListTransformer.intro");
 
 	@Override
     public void addBody(Body body) throws SAXException, WingException, UIException, SQLException, IOException, AuthorizeException, ProcessingException {
@@ -39,6 +40,9 @@ public class ReportsListTransformer extends AbstractDSpaceTransformer {
         report.setHead(T_standard_report);
 
         Division div = report.addInteractiveDivision("standard-report-list", contextPath + "/reports/standard", Division.METHOD_POST);
+
+		div.addPara(T_intro);
+
         org.dspace.app.xmlui.wing.element.List form = div.addList("choose-reports", org.dspace.app.xmlui.wing.element.List.TYPE_FORM);
 
         String configDir = ConfigurationManager.getProperty("dspace.dir") + "/config/modules/reporting";

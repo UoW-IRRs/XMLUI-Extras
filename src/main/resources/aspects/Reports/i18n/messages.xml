@@ -39,9 +39,9 @@
     <message key="uow.aspects.Reports.IndividualReportTransformer.error">If the problem persists, please contact the AgScite Administrator.</message>
 
     <message key="uow.aspects.Reports.fail_header">Failure</message>
-    <message key="uow.aspects.Reports.fail">The report could not be sent. If any fields are marked in red below, please follow the suggestions and try again. Otherwise please try again later or contact the AgScite administrator if the problem persists.</message>
+    <message key="uow.aspects.Reports.fail">The report could not be sent. If any fields are marked in red below, please follow the suggestions and try again. Otherwise please try again later or contact the <a href="mailto:library@agresearch.co.nz">AgScite Co-ordinator</a> if the problem persists.</message>
     <message key="uow.aspects.Reports.success_header">Success</message>
-    <message key="uow.aspects.Reports.success">The report has been sent. Request the same report with different settings or <a href="/reports/standard">go back to reports list</a>.</message>
+    <message key="uow.aspects.Reports.success">The report has been sent. Request the same report with different settings or <a href="/reports/standard">return to the reports menu</a>.</message>
 
     <message key="uow.aspects.Reports.description.all-outputs-with-group-and-team">All outputs by AgResearch Group and Team. Normally used for Annual reporting.</message>
     <message key="uow.aspects.Reports.description.group-outputs">Outputs by AgResearch Group - choose one (or more) AgResearch Groups. Normally used for regular reporting of Group outputs.</message>
@@ -53,6 +53,7 @@
     <message key="uow.aspects.Reports.ReportsListTransformer.title">Standard Reports</message>
     <message key="uow.aspects.Reports.ReportsListTransformer.trail">Standard Reports</message>
     <message key="uow.aspects.Reports.ReportsListTransformer.fail">The system failed to load the reports. Please try again later or contact the AgScite administrator if the problem persists.</message>
+    <message key="uow.aspects.Reports.ReportsListTransformer.intro">The customised reports below use pre-defined fields to suit the most commonly requested AgResearch reporting situations. Choose the report you want, the variable information (depending on the report you can choose Group, Team, Client or Funder), date range and email address. The report will be emailed as an attachment in .csv format, which can be opened and saved to Excel or other formats for filtering and analysis.<br/><br/>Please send feedback on the reports, or suggestions for improvement and additional reporting requirements, to the <a href="mailto:library@agresearch.co.nz">AgScite Co-ordinator</a>.</message>
 
     <message key="uow.aspects.Reports.field-names">Fields included: {0}</message>
 </catalogue>
