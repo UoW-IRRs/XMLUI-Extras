@@ -4,7 +4,7 @@
 
     <groupId>nz.ac.waikato.its</groupId>
     <artifactId>xmlui-extras</artifactId>
-    <version>0.4-SNAPSHOT</version>
+    <version>0.4</version>
   <packaging>jar</packaging>
 
   <name>Additional DSpace XMLUI code</name>
