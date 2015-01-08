@@ -98,7 +98,20 @@ public class EndnoteExportCrosswalk implements StreamDisseminationCrosswalk {
 
 		StringBuilder result = new StringBuilder();
 
-		String field = FIELD_NAME_TOP_LEVEL_TYPE;
+		processField(item, result, FIELD_NAME_TOP_LEVEL_TYPE);
+		for (String field : fields.keySet()) {
+			if (!field.equals(FIELD_NAME_TOP_LEVEL_TYPE)) {
+				processField(item, result, field);
+			}
+		}
+
+		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF8"));
+		writer.append(result);
+		writer.close();
+		out.flush();
+	}
+
+	private void processField(Item item, StringBuilder result, String field) {
 		if (fields.containsKey(field)) {
 			String fieldValue = fields.get(field);
 			Converter converter = null;
@@ -130,11 +143,6 @@ public class EndnoteExportCrosswalk implements StreamDisseminationCrosswalk {
 				}
 			}
 		}
-
-		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF8"));
-		writer.append(result);
-		writer.close();
-		out.flush();
 	}
 
 
