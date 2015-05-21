@@ -1,11 +1,11 @@
 package nz.ac.waikato.its.dspace.app.xmlui.aspect.reports;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 import nz.ac.waikato.its.dspace.reporting.ReportConfigurationService;
 import nz.ac.waikato.its.dspace.reporting.ReportGenerator;
 import nz.ac.waikato.its.dspace.reporting.ReportingException;
-import nz.ac.waikato.its.dspace.reporting.configuration.*;
+import nz.ac.waikato.its.dspace.reporting.configuration.ConfigurationException;
 import nz.ac.waikato.its.dspace.reporting.configuration.Field;
+import nz.ac.waikato.its.dspace.reporting.configuration.Report;
 import org.apache.cocoon.ProcessingException;
 import org.apache.cocoon.environment.ObjectModelHelper;
 import org.apache.cocoon.environment.Request;
@@ -16,15 +16,14 @@ import org.dspace.app.xmlui.utils.UIException;
 import org.dspace.app.xmlui.wing.Message;
 import org.dspace.app.xmlui.wing.WingException;
 import org.dspace.app.xmlui.wing.element.*;
-import org.dspace.app.xmlui.wing.element.List;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.core.ConfigurationManager;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * @author Stefan Mutter (stefanm@waikato.ac.nz) for University of Waikato, ITS
@@ -87,7 +86,7 @@ public class IndividualReportTransformer extends AbstractDSpaceTransformer{
 	    }
 
 		String errorString = parameters.getParameter("errors", "");
-		java.util.List<String> errors = StringUtils.isNotBlank(errorString) ? Arrays.asList(errorString.split(",")) : Collections.emptyList();
+		java.util.List<String> errors = StringUtils.isNotBlank(errorString) ? Arrays.asList(errorString.split(",")) : Collections.<String>emptyList();
 
         Division div = report.addInteractiveDivision("standard-report-form", contextPath + "/reports/standard/" + reportName, Division.METHOD_POST);
         List form = div.addList("set-report-params",List.TYPE_FORM);
