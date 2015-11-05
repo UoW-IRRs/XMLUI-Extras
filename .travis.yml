@@ -5,3 +5,5 @@ jdk:
   - openjdk7
 env:
   - TZ=Pacific/Auckland LANG=en_NZ.UTF-8
+before_install: 
+  - ./install-api-extras.sh
