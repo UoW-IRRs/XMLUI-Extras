@@ -122,8 +122,11 @@ public class IndividualReportTransformer extends AbstractDSpaceTransformer{
 		if (errors.contains("email")) {
 			emailAddressField.addError(T_no_email);
 		}
-        emailAddressField.setLabel(T_email_address_label);
-        emailAddressField.setHelp(T_email_address_help);
+		if (context.getCurrentUser() != null && StringUtils.isNotBlank(context.getCurrentUser().getEmail())) {
+			emailAddressField.setValue(context.getCurrentUser().getEmail());
+		}
+		emailAddressField.setLabel(T_email_address_label);
+		emailAddressField.setHelp(T_email_address_help);
 		emailAddressField.setRequired(true);
 
         if(!errors.isEmpty()){
